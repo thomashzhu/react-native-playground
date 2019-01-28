@@ -1,7 +1,8 @@
 import React from 'react';
 import {
-  GestureResponderHandlers,
+  GestureResponderEvent,
   PanResponder,
+  PanResponderGestureState,
   PanResponderInstance,
 } from 'react-native';
 
@@ -66,7 +67,7 @@ export class Draggable extends React.Component<Props, State> {
     }, () => onTouchStart());
   };
 
-  handlePanResponderMove = (e, gestureState) => {
+  handlePanResponderMove = (e: GestureResponderEvent, gestureState: PanResponderGestureState) => {
     const { onTouchMove } = this.props;
 
     const offset = {
@@ -77,7 +78,7 @@ export class Draggable extends React.Component<Props, State> {
     onTouchMove(offset);
   };
 
-  handlePanResponderEnd = (e, gestureState) => {
+  handlePanResponderEnd = (e: GestureResponderEvent, gestureState: PanResponderGestureState) => {
     const { onTouchMove, onTouchEnd } = this.props;
 
     const offset = {
