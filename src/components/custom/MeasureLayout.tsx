@@ -22,12 +22,16 @@ export class MeasureLayout extends React.Component<Props, State> {
   };
 
   handleLayout = (event: LayoutChangeEvent) => {
-    const { nativeEvent: { layout } } = event;
+    const {
+      nativeEvent: { layout },
+    } = event;
 
     this.setState({
       layout: {
         ...layout,
-        y: layout.y + (Platform.OS === 'android' ? Constants.statusBarHeight : 0),
+        y:
+          layout.y +
+          (Platform.OS === 'android' ? Constants.statusBarHeight : 0),
       },
     });
   };
@@ -38,12 +42,7 @@ export class MeasureLayout extends React.Component<Props, State> {
 
     // Measure the available space with a placeholder view set to flex 1
     if (!layout) {
-      return (
-        <View
-          onLayout={this.handleLayout}
-          style={styles.container}
-        />
-      );
+      return <View onLayout={this.handleLayout} style={styles.container} />;
     }
 
     return children(layout);

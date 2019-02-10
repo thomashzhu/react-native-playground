@@ -17,14 +17,15 @@ export type ModifiedListRenderItemInfo<T> = ListRenderItemInfo<T> & {
 interface Props<T> {
   itemMargin?: number;
   numColumns: number;
-  renderItem: (info: ModifiedListRenderItemInfo<T>) => React.ReactElement<T> | null;
+  renderItem: (
+    info: ModifiedListRenderItemInfo<T>
+  ) => React.ReactElement<T> | null;
 }
-const DEFAULT_PROPS = {
-  itemMargin: StyleSheet.hairlineWidth,
-};
 
 export class Grid<T> extends React.Component<FlatListProps<T> & Props<T>, {}> {
-  static defaultProps = DEFAULT_PROPS;
+  static defaultProps = {
+    itemMargin: StyleSheet.hairlineWidth,
+  };
 
   renderGridItem = (info: ListRenderItemInfo<T>) => {
     const { index } = info;
@@ -36,9 +37,9 @@ export class Grid<T> extends React.Component<FlatListProps<T> & Props<T>, {}> {
       (width - itemMargin * (numColumns - 1)) / numColumns
     );
 
-    const marginLeft = (index % numColumns === 0 ? 0 : itemMargin);
+    const marginLeft = index % numColumns === 0 ? 0 : itemMargin;
 
-    const marginTop = (index < numColumns ? 0 : itemMargin);
+    const marginTop = index < numColumns ? 0 : itemMargin;
 
     return renderItem({
       ...info,
@@ -49,6 +50,7 @@ export class Grid<T> extends React.Component<FlatListProps<T> & Props<T>, {}> {
   };
 
   render() {
+    /* prettier-ignore */
     return (
       <FlatList
         {...this.props}

@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  CameraRoll,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import { CameraRoll, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Permissions } from 'expo';
 
 import { Grid, ModifiedListRenderItemInfo } from './Grid';
@@ -14,18 +9,18 @@ interface GridImage {
 }
 
 interface Props {
-  onPressImage: (uri: string) => void;
+  numColumns: number;
+  onPressImage?: (uri: string) => void;
 }
-const DEFAULT_PROPS = {
-  onPressImage: () => {},
-};
 
 interface State {
   images: GridImage[];
 }
 
 export class ImageGrid extends React.Component<Props, State> {
-  static defaultProps = DEFAULT_PROPS;
+  static defaultProps = {
+    onPressImage: () => {},
+  };
 
   cursor = null;
 
@@ -58,20 +53,20 @@ export class ImageGrid extends React.Component<Props, State> {
 
     const {
       edges,
-      page_info: {
-        end_cursor: endCursor,
-        has_next_page: hasNextPage,
-      },
+      page_info: { end_cursor: endCursor, has_next_page: hasNextPage },
     } = results;
 
     const loadedImages = edges.map(item => item.node.image);
 
-    this.setState(({ images }) => ({
-      images: images.concat(loadedImages),
-    }), () => {
-      this.loading = false;
-      this.cursor = hasNextPage ? endCursor : null;
-    });
+    this.setState(
+      ({ images }) => ({
+        images: images.concat(loadedImages),
+      }),
+      () => {
+        this.loading = false;
+        this.cursor = hasNextPage ? endCursor : null;
+      }
+    );
   };
 
   getNextImages = () => {
@@ -82,7 +77,10 @@ export class ImageGrid extends React.Component<Props, State> {
 
   renderItem = (info: ModifiedListRenderItemInfo<GridImage>) => {
     const {
-      item: { uri }, marginLeft, marginTop, size,
+      item: { uri },
+      marginLeft,
+      marginTop,
+      size,
     } = info;
     const { onPressImage } = this.props;
 
@@ -93,6 +91,7 @@ export class ImageGrid extends React.Component<Props, State> {
       width: size,
     };
 
+    /* prettier-ignore */
     return (
       <TouchableOpacity
         activeOpacity={0.75}
@@ -109,12 +108,15 @@ export class ImageGrid extends React.Component<Props, State> {
   };
 
   render() {
+    const { numColumns } = this.props;
     const { images } = this.state;
 
+    /* prettier-ignore */
     return (
       <Grid
         data={images}
         keyExtractor={(item: GridImage) => item.uri}
+        numColumns={numColumns}
         onEndReached={this.getNextImages}
         renderItem={this.renderItem}
       />

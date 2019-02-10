@@ -10,8 +10,8 @@ const INITIAL_ANIMATION_DURATION = 250;
 
 interface KeyboardEvent {
   endCoordinates: {
-    height: number,
-    screenY: number,
+    height: number;
+    screenY: number;
   };
   duration: number;
 }
@@ -31,26 +31,20 @@ interface State {
 }
 
 export type ChildrenType = State & {
-  containerHeight: number,
+  containerHeight: number;
 };
 
 export class KeyboardState extends React.Component<Props, State> {
   keyboardSubscriptions: EmitterSubscription[];
 
-  constructor(props: Props) {
-    super(props);
-  
-    const { layout: { height } } = props;
-
-    this.state = {
-      contentHeight: height,
-      keyboardAnimationDuration: INITIAL_ANIMATION_DURATION,
-      keyboardHeight: 0,
-      keyboardVisible: false,
-      keyboardWillHide: false,
-      keyboardWillShow: false,
-    };
-  }
+  state = {
+    contentHeight: this.props.layout.height,
+    keyboardAnimationDuration: INITIAL_ANIMATION_DURATION,
+    keyboardHeight: 0,
+    keyboardVisible: false,
+    keyboardWillHide: false,
+    keyboardWillShow: false,
+  };
 
   componentWillMount() {
     if (Platform.OS === 'ios') {
