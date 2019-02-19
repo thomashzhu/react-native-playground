@@ -1,45 +1,64 @@
 import React from 'react';
 import {
+  Image,
+  ListRenderItemInfo,
   SectionList,
   StyleSheet,
   SectionListData,
   SectionListRenderItemInfo,
-  ListRenderItemInfo,
+  View,
+  ActivityIndicator,
 } from 'react-native';
+
+import { getImageUri, MediaType } from '../utils/camera_utils';
 
 type Props = {};
 
 type State = {};
 
 export class HomeScreen extends React.Component<Props, State> {
-  renderContactSectionHeader = ({
-    section,
-  }: {
-    section: SectionListData<string>;
-  }) => {
-    const { title } = section;
-    return null;
+  state = {
+    uri: null,
   };
 
-  renderContactSectionListItem = (info: SectionListRenderItemInfo<string>) => {
-    const { item } = info;
-    return null;
-  };
+  async componentDidMount() {
+    setTimeout(async () => {
+      const uri = await getImageUri(MediaType.PhotoLibrary);
+      this.setState({ uri });
+    }, 1000);
+  }
 
-  renderContactListItem = (info: ListRenderItemInfo<string>) => {
-    const { item } = info;
+  handleLoadComplete = () => {
+    this.setState({ isLoading: false });
   };
 
   render() {
+    const { uri } = this.state;
+
+    /* prettier-ignore */
     return (
-      <SectionList
-        keyExtractor={item => item.id}
-        renderItem={this.renderContactSectionListItem}
-        renderSectionHeader={this.renderContactSectionHeader}
-        sections={[{ title: '', data: [''] }]}
-      />
+      <View style={styles.imageContainer}>
+        {!!uri && (
+          <Image
+            source={{ uri }}
+            style={styles.image}
+          />
+        )}
+
+        
+      </View>
     );
   }
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  imageContainer: {
+    aspectRatio: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image: {
+    ...StyleSheet.absoluteFillObject,
+    resizeMode: 'cover',
+  },
+});
